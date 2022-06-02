@@ -8,7 +8,6 @@ import (
 func main() {
 	host := config.File.MustValue("login_server", "host", "123")
 	fmt.Println(host)
-	config.A()
 
 	g := &A{}
 

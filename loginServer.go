@@ -16,6 +16,7 @@ func main() {
 	port := config.File.MustValue("login_server", "port", "9991")
 
 	s := net.NewServer(host + ":" + port)
+	s.NeedSecret(false)
 	login.Init()
 	s.Router(login.Router)
 	s.Start()

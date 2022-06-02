@@ -2,7 +2,6 @@ package config
 
 import (
 	"errors"
-	"fmt"
 	"log"
 	"os"
 
@@ -41,8 +40,4 @@ func init() {
 func fileExists(filename string) bool {
 	_, err := os.Stat(filename)
 	return err == nil || os.IsExist(err)
-}
-
-func A() {
-	fmt.Println("AAAA")
 }

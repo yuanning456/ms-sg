@@ -1,6 +1,9 @@
 package net
 
-import "strings"
+import (
+	"log"
+	"strings"
+)
 
 
 type group struct {
@@ -38,13 +41,22 @@ func (r Router) Run(req *WsMsgReq, rsq *WsMsgRsp) {
 	for _, g := range r.group {
 		if g.prefix == prefix {
 			g.exec(name, req, rsq)
-		}
-	}
+		} else if g.prefix == "*" {
+			g.exec(name, req, rsq)
+		} 
+	}  
 }
 
 func (g *group) exec(name string, req *WsMsgReq, rsq *WsMsgRsp) () {
 	h := g.handlerMap[name]
 	if h!= nil {
 		h(req, rsq)
+	} else {
+		h := g.handlerMap["*"]
+		if h!= nil {
+			h(req, rsq)
+		} else {
+			log.Println("找不到路由")
+		}
 	}
 }

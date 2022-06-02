@@ -10,6 +10,7 @@ import (
 type server struct {
 	addr string
 	router *Router
+	needSecret bool
 }
 
 func NewServer(addr string) *server {
@@ -17,7 +18,10 @@ func NewServer(addr string) *server {
 		addr: addr,
 	}
 }
-
+func (s *server) NeedSecret(needSecret bool) {
+	s.needSecret = needSecret
+}
+ 
 func (s *server) Router(router *Router) {
 	s.router = router
 }
@@ -61,8 +65,9 @@ func (s *server) wsHandler(w http.ResponseWriter, r *http.Request) {
 	// 	i, p, _ := wsConn.ReadMessage()
 	// 	fmt.Println(i, string(p))
 	// }
-	wsServer := NewWsServer(wsConn)
-	wsServer.router = s.router
+	wsServer := NewWsServer(wsConn, s.needSecret)
+	// wsServer.router = s.router
+	wsServer.Router(s.router)
 	wsServer.Start()
 	wsServer.Handshake()
 }
